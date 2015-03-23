@@ -30,7 +30,10 @@ x86保护模式中权限管理无处不在，下面哪些时候要检查访问�
  ```
 - [x]  
 
->  
+>	1.初步完成段机制，包括对GDT描述符和各段寄存器CS、DS进行初始化
+	2.进入保护模式之前，进行BIOS中断调用获取物理内存分布，并通过ARD格式来表示。ucore启动之后由其page_init函数
+	进行物理内存管理（位置在0x8000处）
+	3.建立并初始化页表（或者多级页表），把CR0第31位置为一，更新GDT，使段机制实现对等映射。
 
 ---
 
@@ -41,7 +44,8 @@ x86保护模式中权限管理无处不在，下面哪些时候要检查访问�
 
 - [x]  
 
-> 
+>	没有初始化IDT，当qemu运行时产生中断请求，发现无法处理，其产生异常，因为IDT没有初始化不能处理，因此又会产生
+	一个同样的异常，表明该异常无法处理，qemu退出。
 
 （2）(spoc)假定你已经完成了lab1的实验,接下来是对lab1的中断处理的回顾：请把你的学号对37(十进制)取模，得到一个数x（x的范围是-1<x<37），然后在你的答案的基础上，修init.c中的kern_init函数，在大约36行处，即
 
@@ -114,21 +118,40 @@ va 0xcd82c07c, pa 0x0c20907c, pde_idx 0x00000336, pde_ctx  0x00037003, pte_idx 0
 
 - [x]  
 
-> 部分函数
-#include <iostream>
-using namespace std;
+> 运行结果
+	va 0xc2265b1f, pa 0x0d8f1b1f, pde_idx 0x00000308, pde_ctx 0x00009003, pte_idx 0x00000265, pte_ctx 0x0d8f1003
+	va 0xcc386bbc, pa 0x0414cbbc, pde_idx 0x00000330, pde_ctx 0x00031003, pte_idx 0x00000386, pte_ctx 0x0414c003
+	va 0xc7ed4d57, pa 0x07311d57, pde_idx 0x0000031f, pde_ctx 0x00020003, pte_idx 0x000002d4, pte_ctx 0x07311003
+	va 0xca6cecc0, pa 0x0c9e9cc0, pde_idx 0x00000329, pde_ctx 0x0002a003, pte_idx 0x000002ce, pte_ctx 0x0c9e9003
+	va 0xc18072e8, pa 0x007412e8, pde_idx 0x00000306, pde_ctx 0x00007003, pte_idx 0x00000007, pte_ctx 0x00741003
+	va 0xcd5f4b3a, pa 0x06ec9b3a, pde_idx 0x00000335, pde_ctx 0x00036003, pte_idx 0x000001f4, pte_ctx 0x06ec9003
+	va 0xcc324c99, pa 0x0008ac99, pde_idx 0x00000330, pde_ctx 0x00031003, pte_idx 0x00000324, pte_ctx 0x0008a003
+	va 0xc7204e52, pa 0x0b8b6e52, pde_idx 0x0000031c, pde_ctx 0x0001d003, pte_idx 0x00000204, pte_ctx 0x0b8b6003
+	va 0xc3a90293, pa 0x0f1fd293, pde_idx 0x0000030e, pde_ctx 0x0000f003, pte_idx 0x00000290, pte_ctx 0x0f1fd003
+	va 0xce6c3f32, pa 0x007d4f32, pde_idx 0x00000339, pde_ctx 0x0003a003, pte_idx 0x000002c3, pte_ctx 0x007d4003
 
-void translate(unsigned int va, unsigned int pa){
-    unsigned int pteindex, ptec, pdeindex, pdec;
-    pteindex = (0xffc00000 & va) >> 22;
-    pdeindex = (0x003fc000 & va) >> 12;
-    ptec = ();
-    pdec = ;
-}    
+	#include <iostream>
+	using namespace std;
 
-int main(){
-    return 0;
-}    
+	void translation(unsigned va, unsigned pa){
+		unsigned pde_idx, pte_idx, pde_ctx, pte_ctx;
+		pde_idx = (va & 0xffc00000) >> 22;
+		pte_idx = (va & 0x003ff000) >> 12;
+		pde_ctx = ((pde_idx - 0x000002ff) << 12 ) | 0x00000003; 
+		pte_ctx = (pa & 0xfffff000) | 0x00000003;
+		printf("va 0x%08x, pa 0x%08x, pde_idx 0x%08x, pde_ctx 0x%08x, pte_idx 0x%08x, pte_ctx 0x%08x\n",
+		va, pa, pde_idx, pde_ctx,pte_idx, pte_ctx);
+	}    
+
+	int main(){
+	  unsigned va, pa;
+	  
+	  scanf("0x%08x 0x%08x", &va, &pa);
+	  //printf("0x%08x, 0x%08x", va, pa);
+	  translation(va, pa);
+	  system("pause");
+	  return 0;
+	}    
 
 ---
 
