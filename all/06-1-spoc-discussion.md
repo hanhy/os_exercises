@@ -177,7 +177,7 @@ Final statistics:
   Average -- Response: 1.00  Turnaround 19.33  Wait 12.00
 
 ```
->结果见链接
+>结果见链接https://github.com/hanhy/os_exercises/blob/master/all/06-1.py
 (２)扩展练习1:理解并实现MLFQ调度算法　可基于python, ruby, C, C++，LISP等）模拟实现，并给出测试，在试验报告写出设计思路和测试结果分析。
 
 (3)扩展练习2:理解并实现stride调度算法　可基于python, ruby, C, C++，LISP等）模拟实现，并给出测试，在试验报告写出设计思路和测试结果分析。
