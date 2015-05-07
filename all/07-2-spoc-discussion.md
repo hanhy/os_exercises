@@ -51,3 +51,43 @@ s.count--;              //有可用资源，占用该资源；
 ## 小组思考题
 
 1. （spoc） 每人用python threading机制用信号量和条件变量两种手段分别实现[47个同步问题](07-2-spoc-pv-problems.md)中的一题。向勇老师的班级从前往后，陈渝老师的班级从后往前。请先理解[]python threading 机制的介绍和实例](https://github.com/chyyuu/ucore_lab/tree/master/related_info/lab7/semaphore_condition)
+ 13题
+import threading
+
+mutex = 0
+customer_count = 0
+thread_list = list() 
+
+def thread_fun(num):  
+    for n in range(0, int(num)):  
+        print " I come from %s, num: %s" %( threading.currentThread().getName(), n)
+		customer(self)
+	
+def p(num):
+	if num > 0:
+		int(num) --
+			
+def v(num):
+	int(num) ++
+
+def service(int, threading.Thread):
+	print "table %d serve thread %s" %(table, threading.Thread.getName())
+	
+def customer(threading.Thread):
+	self.setName(self.name)  
+	p(mutex)
+	service(self)
+	v(mutex)
+	v(customer_count)
+
+def service(num):
+	for i in range(0, int(num)):
+		p(customer_count);
+		p(mutex)
+		customer = thread_list.pop()
+		v(mutex)
+		service(i, customer)
+	end
+def main(n, c_num):
+	for i in range(0, c_num):
+		thread_list.append(threading.Thread(target = thread_fun, name = string(i), args = (int(c_num),))
