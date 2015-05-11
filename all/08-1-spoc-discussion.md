@@ -44,28 +44,9 @@
 ## 小组思考题
 
  - （spoc） 每人用python实现[银行家算法](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab7/deadlock/bankers-homework.py)。大致输出可参考[参考输出](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab7/deadlock/example-output.txt)。除了`YOUR CODE`部分需要填写代码外，在算法的具体实现上，效率也不高，可进一步改进执行效率。
-```
 见代码[banker.py](https://github.com/hanhy/os_exercises/blob/master/all/banker.py)
-```
  - (spoc) 以小组为单位，请思考在lab1~lab5的基础上，是否能够实现IPC机制，请写出如何实现信号，管道或共享内存（三选一）的设计方案。
- ```
-杨博文 2012011288
-韩慧阳 2012011276
-应杰夫 2012011293
  
-alloc_memchat()-->分配一个地址用于进程地址共享通信
-通信地址一定是在堆栈地址以下
-proc->chatmem 该进程共享的通信内存地址
-proc->chatmem_avali 该进程共享的通信内存地址是否有效
-在进程新建的时候如果新建一个共享地址通信，则调用alloc_memchar()请求一个新的通信地址
-在fork的时候可以使用父进程parent->chatmem来给子进程的共享通信地址赋值
-proc->write_procmsg(char*) 向该进程记录的通信地址写入信息，失败返回0，成功返回写入字符长度
-proc->read_procmsg(char*) 从该进程记录的通信地址读取信息，失败返回0，成功返回读取字符长度
-如果在发现有写入消息但是地址不够的情况，则选择一个已占用的地址，通知所有相关的进程修改标记位表示地址已经无效。
-并使用换入换出替换消息页地址。
-**未想好通知进程
-**未想好换入换出策略
- ```
  - (spoc) 扩展：用C语言实现某daemon程序，可检测某网络服务失效或崩溃，并用信号量机制通知重启网络服务。[信号机制的例子](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab7/ipc/signal-ex1.c)
 
  - (spoc) 扩展：用C语言写测试用例，测试管道、消息队列和共享内存三种通信机制进行不同通信间隔和通信量情况下的通信带宽、通信延时、带宽抖动和延时抖动方面的性能差异。[管道的例子](https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab7/ipc/pipe-ex2.c)
